@@ -4,7 +4,7 @@ public class Program {
 
 
 
-    Map<String,Object> temp=new TreeMap<>();
+    public static Map<String,Object> temp=new TreeMap<>();
 
 
     public Map<String,Object> sortedSimpleJSON(JSONScanner jsonScanner){
@@ -15,14 +15,12 @@ public class Program {
                 String value = jsonScanner.next();
                 String K = key.replace('"', ' ');
                 String V = value.replace('"', ' ');
-                this.temp.put(K, V);
-                this.temp=sortedSimpleJSON(jsonScanner);
+                temp.put(key, value);
+                temp=sortedSimpleJSON(jsonScanner);
             }
         }
-        else if(input.equals("}")) {
-            return this.temp;
-        }
-        return this.temp;
+
+        return temp;
     }
 
 
@@ -46,21 +44,21 @@ public class Program {
                     for(String it:values){
                         it = value.replace('"', ' ');
                         }
-                    this.temp.put(K, values);
-                    this.temp=sortedSimpleArrayJSON(jsonScanner);
+                    temp.put(K, values);
+                    temp=sortedSimpleArrayJSON(jsonScanner);
                     }
                 else {
                     String K = key.replace('"', ' ');
                     String V = value.replace('"', ' ');
-                    this.temp.put(K, V);
-                    this.temp = sortedSimpleArrayJSON(jsonScanner);
+                    temp.put(K, V);
+                    temp = sortedSimpleArrayJSON(jsonScanner);
                     }
             }
         }
         else if(input.equals("}")) {
-            return this.temp;
+            return temp;
         }
-        return this.temp;
+        return temp;
     }
 
     public boolean compareJSON(Map<String,Object> m1,Map<String,Object> m2){
@@ -70,21 +68,44 @@ public class Program {
         return false;
     }
 
+    public Map<String,Object> determineJSON(JSONScanner jsonScanner,int flag){
+        Map<String,Object> myMap=new TreeMap<>();
+        if (flag==1) {
+            myMap = sortedSimpleJSON(jsonScanner);
+        }
+        else if (flag==2) {
+            myMap = sortedSimpleArrayJSON(jsonScanner);
+        }
+        else {
+            System.out.println("Invalid Input");
+        }
+        return myMap;
+    }
+
 
     public static void main(String args[]) {
         Program program=new Program();
+        System.out.println("Enter '1' for Simple JSON, Enter '2' for Array JSON ");
+        Scanner scanner=new Scanner(System.in);
+        int flag=scanner.nextInt();
+        System.out.println("Enter First Value: ");
         JSONScanner jsonScanner1 = new JSONScanner(System.in);
-        Map<String,Object> finalM1=program.sortedSimpleJSON(jsonScanner1);
+        Map<String,Object> finalM1=program.determineJSON(jsonScanner1,flag);
+        temp=new TreeMap<>();
+        System.out.println("Enter Second Value: ");
         JSONScanner jsonScanner2 = new JSONScanner(System.in);
-        Map<String,Object> finalM2=program.sortedSimpleJSON(jsonScanner2);
+        Map<String,Object> finalM2=program.determineJSON(jsonScanner2,flag);
+
         if (program.compareJSON(finalM1,finalM2)){
             System.out.println("Equal");
             }
         else {
             System.out.println("NOT Equal");
             }
+        String m1=finalM1.toString().replace('=',':');
+        String m2=finalM2.toString().replace('=',':');
         System.out.println("************************");
-        System.out.println(finalM1.toString());
-        System.out.println(finalM2.toString());
+        System.out.println(m1);
+        System.out.println(m2);
     }
 }
