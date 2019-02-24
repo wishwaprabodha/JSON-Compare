@@ -2,13 +2,28 @@ import java.util.*;
 
 public class Main {
 
+    /*Funtion that reads token from JSONScanner and use recursive approach
+    * get the tokens and categorize accordingly.
+    * Function accepts a jsonScanner object as a parameter and returns
+    * an Object
+    * */
+
+
     private static Object getObject(JSONScanner jsonScanner) {
         String part = jsonScanner.next();
 
+
+        /**
+         * switch statement is used to break into code with defined singletons.
+         * */
         switch (part) {
             case "{": {
-                // object
-                Map<String, Object> child = new TreeMap<>();
+
+                /*
+                * A Map with key,value pairs in <String, Object> type is used
+                * as the primary data structure
+                * */
+                 Map<String, Object> child = new TreeMap<>();
 
                 String condition = part;
                 Object value;
@@ -16,6 +31,7 @@ public class Main {
                 while (!condition.equals("}")) {
                     String key = jsonScanner.next();
                     jsonScanner.next(); // remove ':'
+                    //Recursive call
                     value = getObject(jsonScanner);
                     child.put(key, value);
 
@@ -45,10 +61,11 @@ public class Main {
         }
     }
 
+            // Main Function
     public static void main(String[] args) {
-        // write your code here
+
+        // instantiating the JSONScanner
         JSONScanner jsonScanner1 = new JSONScanner(System.in);
-        //JSONScanner jsonScanner2 = new JSONScanner(System.in);
 
         Object object1 = getObject(jsonScanner1);
         Object object2 = getObject(jsonScanner1);
