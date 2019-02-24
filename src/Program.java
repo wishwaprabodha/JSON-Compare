@@ -85,11 +85,21 @@ public class Program {
 
     public static void main(String args[]) {
         Program program=new Program();
-        System.out.println("Enter '1' for Simple JSON, Enter '2' for Array JSON ");
-        Scanner scanner=new Scanner(System.in);
-        int flag=scanner.nextInt();
+        String out=" ";
+        int flag;
         System.out.println("Enter First Value: ");
         JSONScanner jsonScanner1 = new JSONScanner(System.in);
+        while (jsonScanner1.hasNext()){
+            String token=jsonScanner1.next();
+            out=out+token;
+        }
+        if(out.indexOf("[")>0){
+            flag=2;
+            }
+        else {
+            flag=1;
+        }
+        jsonScanner1 = new JSONScanner(out);
         Map<String,Object> finalM1=program.determineJSON(jsonScanner1,flag);
         temp=new TreeMap<>();
         System.out.println("Enter Second Value: ");
